@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Arulmilton — Dark Premium (Page Transitions)</title>
+  <link rel="icon" href="./pics/title pic.jpeg" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com">  /* ------- 3D Tilt Hover Interactions ------- */
+  document.querySelectorAll('.tilt-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -8;  
+      const rotateY = ((x - centerX) / centerX) * 8;
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
+  });
+</script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','system-ui','sans-serif'], serif: ['Playfair Display','serif'] },
+          colors: { 'bg-ink': '#06070a','card-ink':'#0b0f14','neon-cyan':'#00F0FF','neon-pink':'#FF4ECF','muted-ghost':'#97A0B3' },
+          keyframes: {
+            'gradient-shift': { '0%,100%': {'background-position':'0% 50%'}, '50%':{'background-position':'100% 50%'} },
+            'fade-up': { '0%':{opacity:'0',transform:'translateY(14px)'}, '100%':{opacity:'1', transform:'translateY(0)'} },
+            'overlay-in': { '0%':{opacity:'0', transform:'scale(1.02)'}, '100%':{opacity:'1', transform:'scale(1)'} },
+            'overlay-out': { '0%':{opacity:'1', transform:'scale(1)'}, '100%':{opacity:'0', transform:'scale(0.98)'} }
+          },
+          animation: { 'gradient-shift':'gradient-shift 18s linear infinite', 'fade-up':'fade-up .6s cubic-bezier(.2,.9,.2,1) both' }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root{color-scheme: dark}
+    body{background:#06070a;font-family:Inter,system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
+    .hero-bg{background: linear-gradient(90deg, rgba(10,12,18,1) 0%, rgba(12,8,30,1) 35%, rgba(28,8,44,1) 65%, rgba(6,8,18,1) 100%); background-size: 300% 300%; animation: gradient-shift 18s linear infinite}
+    .glass {background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.04); backdrop-filter: blur(6px);}
+    .neon-outline {box-shadow: 0 8px 32px rgba(0,240,255,0.06), inset 0 0 48px rgba(255,78,207,0.02)}
+    .cover-img{height:240px;object-fit:cover;border-radius:12px}
+    .slider-wrapper{display:flex;transition:transform .6s cubic-bezier(.2,.9,.2,1)}
+    .slider-item{min-width:100%;flex-shrink:0}
+    .no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{-ms-overflow-style:none;scrollbar-width:none}
+
+    /* Page transition overlay */
+    .page-overlay{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg, rgba(0,240,255,0.06), rgba(255,78,207,0.06));backdrop-filter: blur(6px);opacity:0;pointer-events:none;transition:opacity .45s ease}
+    .page-overlay.show{pointer-events:auto;opacity:1}
+    .overlay-panel{width:220px;height:220px;border-radius:16px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:flex;align-items:center;justify-content:center;flex-direction:column;border:1px solid rgba(255,255,255,0.04);box-shadow:0 20px 60px rgba(0,0,0,0.6)}
+    .overlay-logo{width:88px;height:88px;border-radius:999px;overflow:hidden}
+    .overlay-text{margin-top:12px;color:#cfeffd;font-weight:600;font-size:13px}
+
+    /* Reveal on scroll */
+    .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease, transform .7s cubic-bezier(.2,.9,.2,1)}
+    .reveal.revealed{opacity:1;transform:none}
+
+    /* section spacing for smoother in/out scrolling */
+    section{scroll-margin-top:84px}
+
+    @media (min-width:1024px){.hero-content{max-width:980px}}
+    /* --- 3D HOVER ANIMATIONS (PREMIUM INTERACTIVE TILT) --- */
+  .tilt-card {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .tilt-card:hover {
+    box-shadow: 0 20px 40px rgba(0, 200, 255, 0.25);
+  }
+</style>
+</head>
+<body class="text-gray-200 bg-ink">
+
+  <!-- Page overlay used for smooth 'page' transitions when clicking nav links -->
+  <div id="page-overlay" class="page-overlay" aria-hidden="true">
+    <div class="overlay-panel">
+      <div class="overlay-logo">
+        <img src="./pics/title pic.jpeg" alt="logo" class="w-full h-full object-cover" />
+      </div>
+      <div class="overlay-text">ARULMILTON</div>
+    </div>
+  </div>
+
+  <!-- NAV (sticky) -->
+  <nav class="sticky top-0 z-50 bg-gradient-to-b from-black/60 via-black/20 to-transparent backdrop-blur-md border-b border-white/5">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="#hero" class="flex items-center gap-3 nav-link">
+          <img src="./pics/title pic.jpeg" alt="logo" class="w-10 h-10 rounded-full ring-1 ring-white/10 shadow-sm">
+          <div>
+            <div class="text-white font-semibold">ARULMILTON</div>
+            <div class="text-xs text-muted-ghost">BCA • Process Executive</div>
+          </div>
+        </a>
+
+        <div class="hidden md:flex items-center gap-6">
+          <a href="#about" class="text-sm text-muted-ghost hover:text-white transition nav-link">About</a>
+          <a href="#projects" class="text-sm text-muted-ghost hover:text-white transition nav-link">Projects</a>
+          <a href="#gallery" class="text-sm text-muted-ghost hover:text-white transition nav-link">Gallery</a>
+          <a href="#certificates-pro" class="text-sm text-muted-ghost hover:text-white transition nav-link">Certificates</a>
+          <a href="#contact" class="px-4 py-2 rounded-full text-sm bg-gradient-to-r from-neon-cyan to-neon-pink text-black font-semibold hover:scale-105 transform transition shadow-lg nav-link">Contact</a>
+        </div>
+
+        <div class="md:hidden">
+          <button id="mobile-toggle" aria-label="Toggle menu" class="p-2 rounded-md bg-white/6 hover:bg-white/8">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="mobile-menu" class="mt-4 hidden md:hidden">
+        <div class="flex flex-col gap-3 p-4 bg-black/40 rounded-lg glass">
+          <a href="#about" class="text-white nav-link">About</a>
+          <a href="#projects" class="text-white nav-link">Projects</a>
+          <a href="#gallery" class="text-white nav-link">Gallery</a>
+          <a href="#certificates-pro" class="text-white nav-link">Certificates</a>
+          <a href="#contact" class="text-white nav-link">Contact</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header id="hero" class="hero-bg min-h-screen flex items-center justify-center text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-20" style="background-image:radial-gradient(circle at 15% 20%, rgba(0,240,255,0.06), transparent 8%), radial-gradient(circle at 85% 80%, rgba(255,78,207,0.06), transparent 8%);"></div>
+
+    <div class="relative z-20 max-w-4xl px-6 lg:px-0 hero-content reveal">
+      <div class="inline-block mb-6 px-4 py-1 rounded-full bg-black/40 text-xs text-muted-ghost">Cultivating Myself • Portfolio • Selected Works</div>
+      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-white drop-shadow-lg leading-tight font-serif">Hey — I'm <span class="text-neon-cyan">Arulmilton</span></h1>
+      <p class="mt-4 text-lg text-muted-ghost max-w-3xl mx-auto">Process Executive at Quinte Fintech. Where I oversee Salesforce operations, including onboarding and updating accounts, performing account maintenance, addressing client inquiries, and implementing system updates to optimize workflow efficiency.</p>
+
+      <div class="mt-8 flex items-center justify-center gap-4">
+        <a href="#projects" class="px-6 py-3 rounded-full bg-gradient-to-r from-neon-cyan to-neon-pink font-semibold text-black shadow-lg transform hover:scale-105 transition nav-link">See Projects</a>
+        <a href="#contact" class="px-6 py-3 rounded-full border border-white/6 text-white hover:bg-white/4 transition nav-link">Get in touch</a>
+      </div>
+
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="glass neon-outline p-4 rounded-2xl text-left">
+          <div class="text-xs text-muted-ghost">Role</div>
+          <div class="text-white font-semibold">Process Executive</div>
+        </div>
+        <div class="glass p-4 rounded-2xl text-left">
+          <div class="text-xs text-muted-ghost">Skills</div>
+          <div class="text-white font-semibold">Salesforce · Data · SQL · Python </div>
+        </div>
+        <div class="glass p-4 rounded-2xl text-left">
+          <div class="text-xs text-muted-ghost">Location</div>
+          <div class="text-white font-semibold">Trichy, India</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="absolute right-8 bottom-12 hidden lg:block">
+      <div class="w-52 h-52 rounded-3xl overflow-hidden ring-2 ring-white/6 shadow-2xl">
+        <img src="./pics/IMG_0761.JPG" alt="profile" class="w-full h-full object-cover">
+      </div>
+    </div>
+  </header>
+  <br>
+
+  <main class="max-w-6xl mx-auto px-6 lg:px-8 -mt-28">
+    <section id="projects" class="mb-12 reveal">
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Selected Projects</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <article class="glass p-5 rounded-2xl neon-outline hover:scale-[1.02] transition transform reveal">
+          <img src="./pics/port.png" alt="Portfolio" class="w-full cover-img mb-4 rounded-lg">
+          <h3 class="text-lg font-semibold text-white">Portfolio Website</h3>
+          <p class="text-sm text-muted-ghost mt-2">Personal portfolio built with Tailwind CSS, showcasing projects, certificates and a clean reading experience.</p>
+          <div class="mt-4 flex items-center justify-between">
+            <div class="text-xs text-muted-ghost">HTML · Tailwind · JS</div>
+            <a href="milton1208.github.io/portfolio/" class="text-sm font-semibold bg-white/6 px-3 py-1 rounded-full nav-link">Details</a>
+          </div>
+        </article>
+
+        <article class="glass p-5 rounded-2xl hover:scale-[1.02] transition transform reveal">
+          <img src="./pics/Screenshot 2025-03-13 235444.png" alt="Food Order" class="w-full cover-img mb-4 rounded-lg">
+          <h3 class="text-lg font-semibold text-white">Food Ordering Website</h3>
+          <p class="text-sm text-muted-ghost mt-2">Full-stack prototype (PHP) with cart management and simple admin panel.</p>
+          <div class="mt-4 flex items-center justify-between">
+            <div class="text-xs text-muted-ghost">PHP · MySQL · JS</div>
+            <a href="milton1208.github.io/sarieats/" class="text-sm font-semibold bg-white/6 px-3 py-1 rounded-full nav-link">Details</a>
+          </div>
+        </article>
+
+        <article class="glass p-5 rounded-2xl hover:scale-[1.02] transition transform reveal">
+          <img src="./pics/techtack.jpg" alt="Web Dev Internship" class="w-full cover-img mb-4 rounded-lg">
+          <h3 class="text-lg font-semibold text-white">Web Dev Internship</h3>
+          <p class="text-sm text-muted-ghost mt-2">Practical training focused on building responsive interfaces and accessibility.</p>
+          <div class="mt-4 flex items-center justify-between">
+            <div class="text-xs text-muted-ghost">HTML · CSS · JS</div>
+            <a href="#contact" class="text-sm font-semibold bg-white/6 px-3 py-1 rounded-full nav-link">Details</a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="gallery" class="mb-12 reveal">
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Gallery</h2>
+      <div class="relative overflow-hidden rounded-2xl glass p-1 neon-outline">
+        <div class="slider-wrapper no-scrollbar" id="about-slider">
+          <div class="slider-item px-4">
+            <img src="./pics/IMG_0211-2.png" alt="Slide 1" class="w-full rounded-xl h-64 object-cover">
+          </div>
+          <div class="slider-item px-4">
+            <img src="./pics/IMG_0254.JPG" alt="Slide 2" class="w-full rounded-xl h-64 object-cover">
+          </div>
+          <div class="slider-item px-4">
+            <img src="./pics/IMG_2068.PNG" alt="Slide 3" class="w-full rounded-xl h-64 object-cover">
+          </div>
+          <div class="slider-item px-4">
+            <img src="./pics/IMG_0182.PNG" alt="Slide 1" class="w-full rounded-xl h-64 object-cover">
+          </div>
+          <div class="slider-item px-4">
+            <img src="./pics/IMG_0736.JPG" alt="Slide 2" class="w-full rounded-xl h-64 object-cover">
+          </div>
+          <div class="slider-item px-4">
+            <img src="./pics/IMG_3785.JPG" alt="Slide 3" class="w-full rounded-xl h-64 object-cover">
+          </div>
+        </div>
+        <button id="prev" aria-label="prev" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/30 p-2 rounded-md">‹</button>
+        <button id="next" aria-label="next" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/30 p-2 rounded-md">›</button>
+      </div>
+    </section>
+
+    <section id="certificates-pro" class="mb-12 reveal">
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Certificates & Training</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="p-3 glass rounded-lg text-center reveal">
+          <img src="./pics/IMG_0094.PNG" alt="cert" class="mx-auto mb-2 w-20 h-20 object-cover rounded-md">
+          <div class="text-sm text-muted-ghost">Elevate Labs</div>
+        </div>
+        <div class="p-3 glass rounded-lg text-center reveal">
+          <img src="./pics/IBM DAPY.png" alt="cert" class="mx-auto mb-2 w-20 h-20 object-cover rounded-md">
+          <div class="text-sm text-muted-ghost">IBM — Python</div>
+        </div>
+        <div class="p-3 glass rounded-lg text-center reveal">
+          <img src="./pics/sql.png" alt="cert" class="mx-auto mb-2 w-20 h-20 object-cover rounded-md">
+          <div class="text-sm text-muted-ghost">HackerRank — SQL</div>
+        </div>
+        <div class="p-3 glass rounded-lg text-center reveal">
+          <img src="./pics/TATA certificate.png" alt="cert" class="mx-auto mb-2 w-20 h-20 object-cover rounded-md">
+          <div class="text-sm text-muted-ghost">TATA — AIDA</div>
+        </div>
+        <div class="p-3 glass rounded-lg text-center reveal">
+          <img src="./pics/SSM.png" alt="cert" class="mx-auto mb-2 w-20 h-20 object-cover rounded-md">
+          <div class="text-sm text-muted-ghost">Social Media Marketing</div>
+        </div>
+        <div class="p-3 glass rounded-lg text-center reveal">
+          <img src="./pics/tcs carer edge.png" alt="cert" class="mx-auto mb-2 w-20 h-20 object-cover rounded-md">
+          <div class="text-sm text-muted-ghost">TCS-carer edge</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="mb-12 reveal">
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">About & Education</h2>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="glass p-6 rounded-2xl reveal">
+          <h3 class="text-lg font-semibold text-white">About Me</h3>
+          <p class="text-muted-ghost mt-3">I’m a BCA graduate (St Joseph's College, Trichy). I enjoy building lightweight tools, automating workflows, and creating clean, readable web experiences. Professionally I work at Quinte Fintech as a Process Executive.</p>
+        </div>
+        <div class="glass p-6 rounded-2xl reveal">
+          <h3 class="text-lg font-semibold text-white">Education</h3>
+          <p class="text-muted-ghost mt-3">Bachelor of Computer Applications (BCA) — St. Joseph's College -[7.4 CGPA] (2022–2025)</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="mb-24 reveal">
+      <div class="glass p-8 rounded-2xl text-center">
+        <h2 class="text-2xl font-bold text-white">Let’s build something together</h2>
+        <p class="text-muted-ghost mt-3">Email me for freelance, full-time or collaboration opportunities.</p>
+        <a href="mailto:doitwithmilton@gmail.com" class="mt-6 inline-block px-6 py-3 rounded-full bg-gradient-to-r from-neon-cyan to-neon-pink font-semibold text-black shadow-lg">Email: doitwithmilton@gmail.com</a>
+        <div class="mt-6 text-sm text-muted-ghost">Or find me on <a href="https://www.linkedin.com/in/arulmilton" target="_blank" class="text-white underline">LinkedIn</a> / <a href="https://github.com/milton1208" target="_blank" class="text-white underline">GitHub</a> /  <a href="https://www.instagram.com/funny_boy_milton_/" target="_blank" class="text-white underline">Instagram</a></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="py-8 text-center text-sm text-muted-ghost">© 2025 Arulmilton S. — Crafted with care.</footer>
+
+  <script>
+    // Mobile toggle
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileToggle?.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+
+    // Slider logic
+    const slider = document.getElementById('about-slider');
+    const slides = document.querySelectorAll('#about-slider .slider-item');
+    let idx = 0; let autoId = null; const delay = 3500;
+    function goTo(i){ if(!slider) return; idx = (i+slides.length) % slides.length; slider.style.transform = `translateX(${ -idx * 100 }%)`; }
+    document.getElementById('prev')?.addEventListener('click', ()=> goTo(idx-1));
+    document.getElementById('next')?.addEventListener('click', ()=> goTo(idx+1));
+    function startAuto(){ autoId = setInterval(()=> goTo(idx+1), delay); }
+    function stopAuto(){ if(autoId) clearInterval(autoId); autoId = null; }
+    slider?.addEventListener('mouseenter', stopAuto); slider?.addEventListener('mouseleave', startAuto);
+    goTo(0); startAuto();
+
+    // IntersectionObserver for reveal-on-scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('revealed'); } });
+    },{threshold:0.12});
+    reveals.forEach(r=> io.observe(r));
+
+    // Page transition overlay logic for smooth in-page navigation
+    const overlay = document.getElementById('page-overlay');
+    const navLinks = document.querySelectorAll('a.nav-link');
+    let overlayTimeout = null;
+
+    function showOverlayThenScroll(targetId){
+      if(!overlay) return;
+      overlay.classList.add('show');
+      // small scale/opacity animation using CSS transitions
+      // wait for overlay to be visible then perform scroll
+      clearTimeout(overlayTimeout);
+      overlayTimeout = setTimeout(()=>{
+        const target = document.querySelector(targetId);
+        if(target){
+          target.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+        // hide overlay after short delay
+        overlayTimeout = setTimeout(()=> overlay.classList.remove('show'), 700);
+      }, 220);
+    }
+
+    navLinks.forEach(link=>{
+      link.addEventListener('click', (e)=>{
+        const href = link.getAttribute('href');
+        if(href && href.startsWith('#')){
+          e.preventDefault();
+          showOverlayThenScroll(href);
+        }
+      });
+    });
+
+    // on direct hash navigation (page load with #anchor), run reveal + ensure overlay not shown
+    window.addEventListener('load', ()=>{
+      if(location.hash){ const el = document.querySelector(location.hash); if(el) setTimeout(()=> el.scrollIntoView({behavior:'smooth'}), 120);
+    }});
+  </script>
+</body>
+</html>
